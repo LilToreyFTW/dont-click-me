@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}RealLife AI Email System{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+</head>
+<body>
+    <div class="chrome-container">
+        <!-- Chrome-style header -->
+        <header class="chrome-header">
+            <div class="header-left">
+                <div class="logo">
+                    <i class="fas fa-envelope"></i>
+                    <span class="logo-text">RealLife AI Email</span>
+                </div>
+            </div>
+            <div class="header-center">
+                {% block header_content %}{% endblock %}
+            </div>
+            <div class="header-right">
+                {% if session.user_id %}
+                <div class="user-menu">
+                    <span class="user-name">{{ session.username }}</span>
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="window-controls">
+                    <button class="control-btn minimize">_</button>
+                    <button class="control-btn close">×</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main content area -->
+        <main class="main-content">
+            {% block content %}{% endblock %}
+        </main>
+
+        <!-- Chrome-style footer -->
+        <footer class="chrome-footer">
+            <div class="status-bar">
+                <span class="status-text">Ready - RealLife AI Email System v1.0</span>
+                <span class="version">v1.0.0</span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

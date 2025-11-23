@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Register - RealLife AI Email System{% endblock %}
+
+{% block content %}
+<div class="sidebar">
+    <div class="sidebar-section">
+        <h3 class="sidebar-title">Account</h3>
+        <a href="/" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="/register" class="nav-item active">
+            <i class="fas fa-user-plus"></i>
+            <span>Register</span>
+        </a>
+        <a href="/login" class="nav-item">
+            <i class="fas fa-sign-in-alt"></i>
+            <span>Login</span>
+        </a>
+    </div>
+</div>
+
+<div class="content-area">
+    <div class="content-header">
+        <h1 class="page-title">Create Your Account</h1>
+        <p class="page-subtitle">Join RealLife AI Email System for professional email management</p>
+    </div>
+
+    <div class="content-body">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'error' if category == 'error' else 'success' if category == 'success' else 'warning' }}">
+                        <i class="fas fa-{{ 'exclamation-circle' if category == 'error' else 'check-circle' if category == 'success' else 'exclamation-triangle' }}"></i>
+                        <span>{{ message }}</span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Sign Up</h2>
+                <p class="card-subtitle">Create your account to get started</p>
+            </div>
+
+            <form method="POST" class="form-container">
+                <div class="form-group">
+                    <label for="username" class="form-label">
+                        <i class="fas fa-user" style="margin-right: 8px;"></i>
+                        Username
+                    </label>
+                    <input type="text" id="username" name="username" class="form-input" required
+                           placeholder="Choose a username" minlength="3" maxlength="50">
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">
+                        <i class="fas fa-envelope" style="margin-right: 8px;"></i>
+                        Email Address
+                    </label>
+                    <input type="email" id="email" name="email" class="form-input" required
+                           placeholder="your@email.com">
+                    <small style="color: var(--text-gray-light); font-size: 12px; margin-top: 5px; display: block;">
+                        We'll send a verification link to this email address
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">
+                        <i class="fas fa-lock" style="margin-right: 8px;"></i>
+                        Password
+                    </label>
+                    <input type="password" id="password" name="password" class="form-input" required
+                           placeholder="Create a strong password" minlength="8">
+                    <small style="color: var(--text-gray-light); font-size: 12px; margin-top: 5px; display: block;">
+                        Must be at least 8 characters long
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password" class="form-label">
+                        <i class="fas fa-lock" style="margin-right: 8px;"></i>
+                        Confirm Password
+                    </label>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-input" required
+                           placeholder="Confirm your password">
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" required style="margin: 0;">
+                        <span style="font-size: 14px; color: var(--text-gray);">
+                            I agree to the <a href="#" style="color: var(--chrome-blue);">Terms of Service</a> and
+                            <a href="#" style="color: var(--chrome-blue);">Privacy Policy</a>
+                        </span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">
+                    <i class="fas fa-user-plus"></i>
+                    Create Account
+                </button>
+            </form>
+
+            <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+                <p style="color: var(--text-gray); margin-bottom: 10px;">
+                    Already have an account?
+                </p>
+                <a href="/login" class="btn btn-secondary">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Sign In Instead
+                </a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Why Choose Our Email System?</h2>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                <div style="text-align: center;">
+                    <i class="fas fa-shield-alt" style="font-size: 32px; color: var(--chrome-blue); margin-bottom: 10px;"></i>
+                    <h4 style="color: var(--text-white); margin-bottom: 5px;">Secure</h4>
+                    <p style="color: var(--text-gray); font-size: 14px;">
+                        End-to-end encryption and advanced security features
+                    </p>
+                </div>
+
+                <div style="text-align: center;">
+                    <i class="fas fa-rocket" style="font-size: 32px; color: var(--chrome-blue); margin-bottom: 10px;"></i>
+                    <h4 style="color: var(--text-white); margin-bottom: 5px;">Fast</h4>
+                    <p style="color: var(--text-gray); font-size: 14px;">
+                        Lightning-fast email delivery and instant notifications
+                    </p>
+                </div>
+
+                <div style="text-align: center;">
+                    <i class="fas fa-brain" style="font-size: 32px; color: var(--chrome-blue); margin-bottom: 10px;"></i>
+                    <h4 style="color: var(--text-white); margin-bottom: 5px;">Smart</h4>
+                    <p style="color: var(--text-gray); font-size: 14px;">
+                        AI-powered features for better email management
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

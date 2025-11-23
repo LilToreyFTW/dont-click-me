@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - RealLife AI Email System{% endblock %}
+
+{% block content %}
+<div class="sidebar">
+    <div class="sidebar-section">
+        <h3 class="sidebar-title">Email</h3>
+        <a href="/dashboard" class="nav-item active">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="/compose" class="nav-item">
+            <i class="fas fa-edit"></i>
+            <span>Compose</span>
+        </a>
+        <a href="/inbox" class="nav-item">
+            <i class="fas fa-inbox"></i>
+            <span>Inbox</span>
+        </a>
+    </div>
+
+    <div class="sidebar-section">
+        <h3 class="sidebar-title">Account</h3>
+        <a href="#" class="nav-item">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+        </a>
+        <a href="/logout" class="nav-item">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+</div>
+
+<div class="content-area">
+    <div class="content-header">
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle">Welcome back, {{ user.username }}! Here's your email overview.</p>
+    </div>
+
+    <div class="content-body">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'error' if category == 'error' else 'success' if category == 'success' else 'warning' }}">
+                        <i class="fas fa-{{ 'exclamation-circle' if category == 'error' else 'check-circle' if category == 'success' else 'exclamation-triangle' }}"></i>
+                        <span>{{ message }}</span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Stats Cards -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+            <div class="card dashboard-stats">
+                <div style="text-align: center;">
+                    <i class="fas fa-envelope" style="font-size: 32px; color: var(--chrome-blue); margin-bottom: 10px;"></i>
+                    <h3 id="totalEmails-stat" style="font-size: 28px; color: var(--text-white); margin-bottom: 5px;">--</h3>
+                    <p style="color: var(--text-gray);">Total Emails</p>
+                </div>
+            </div>
+
+            <div class="card dashboard-stats">
+                <div style="text-align: center;">
+                    <i class="fas fa-envelope-open" style="font-size: 32px; color: var(--accent-green); margin-bottom: 10px;"></i>
+                    <h3 id="unreadEmails-stat" style="font-size: 28px; color: var(--text-white); margin-bottom: 5px;">--</h3>
+                    <p style="color: var(--text-gray);">Unread Emails</p>
+                </div>
+            </div>
+
+            <div class="card dashboard-stats">
+                <div style="text-align: center;">
+                    <i class="fas fa-paper-plane" style="font-size: 32px; color: #fb8c00; margin-bottom: 10px;"></i>
+                    <h3 id="sentToday-stat" style="font-size: 28px; color: var(--text-white); margin-bottom: 5px;">--</h3>
+                    <p style="color: var(--text-gray);">Sent Today</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Quick Actions</h2>
+                <p class="card-subtitle">Common tasks and shortcuts</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                <a href="/compose" class="btn btn-primary" style="text-decoration: none; text-align: center; padding: 20px;">
+                    <i class="fas fa-edit" style="font-size: 20px; margin-bottom: 8px;"></i><br>
+                    Compose Email
+                </a>
+
+                <a href="/inbox" class="btn btn-secondary" style="text-decoration: none; text-align: center; padding: 20px;">
+                    <i class="fas fa-inbox" style="font-size: 20px; margin-bottom: 8px;"></i><br>
+                    View Inbox
+                </a>
+
+                <button onclick="checkUnreadEmails()" class="btn btn-secondary" style="text-align: center; padding: 20px;">
+                    <i class="fas fa-sync" style="font-size: 20px; margin-bottom: 8px;"></i><br>
+                    Refresh
+                </button>
+
+                <button onclick="showSettings()" class="btn btn-secondary" style="text-align: center; padding: 20px;">
+                    <i class="fas fa-cog" style="font-size: 20px; margin-bottom: 8px;"></i><br>
+                    Settings
+                </button>
+            </div>
+        </div>
+
+        <!-- Recent Emails -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Recent Emails</h2>
+                <p class="card-subtitle">Your latest email activity</p>
+            </div>
+
+            <div class="email-list">
+                {% if emails %}
+                    {% for email in emails %}
+                    <div class="email-item {% if not email.is_read %}email-unread{% endif %}">
+                        <div class="email-avatar">
+                            {{ email.sender_email[0].upper() }}
+                        </div>
+                        <div class="email-content">
+                            <div class="email-sender">{{ email.sender_email }}</div>
+                            <div class="email-subject">{{ email.subject }}</div>
+                            <div class="email-preview">{{ email.body[:100] }}{% if email.body|length > 100 %}...{% endif %}</div>
+                        </div>
+                        <div class="email-meta">
+                            {{ email.received_at | datetime }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div style="text-align: center; padding: 40px; color: var(--text-gray);">
+                        <i class="fas fa-inbox" style="font-size: 48px; margin-bottom: 20px; opacity: 0.5;"></i>
+                        <h3>No emails yet</h3>
+                        <p>Your inbox is empty. New emails will appear here.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if emails %}
+            <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+                <a href="/inbox" class="btn btn-secondary">
+                    <i class="fas fa-list"></i>
+                    View All Emails
+                </a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- System Status -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">System Status</h2>
+                <p class="card-subtitle">Current system information and status</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="width: 12px; height: 12px; background: var(--accent-green); border-radius: 50%;"></div>
+                    <div>
+                        <div style="font-weight: 600; color: var(--text-white);">Email Server</div>
+                        <div style="font-size: 12px; color: var(--text-gray);">Online - Ready to send/receive</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="width: 12px; height: 12px; background: var(--chrome-blue); border-radius: 50%;"></div>
+                    <div>
+                        <div style="font-weight: 600; color: var(--text-white);">Database</div>
+                        <div style="font-size: 12px; color: var(--text-gray);">Connected - All systems normal</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="width: 12px; height: 12px; background: #fb8c00; border-radius: 50%;"></div>
+                    <div>
+                        <div style="font-weight: 600; color: var(--text-white);">AI Processing</div>
+                        <div style="font-size: 12px; color: var(--text-gray);">Active - Monitoring emails</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+function checkUnreadEmails() {
+    fetch('/api/emails/unread')
+        .then(response => response.json())
+        .then(data => {
+            EmailSystem.updateUnreadCount(data.count);
+            EmailSystem.showAlert('Email list refreshed!', 'success');
+        })
+        .catch(error => {
+            console.error('Error refreshing emails:', error);
+            EmailSystem.showAlert('Failed to refresh emails', 'error');
+        });
+}
+
+function showSettings() {
+    EmailSystem.showAlert('Settings panel coming soon!', 'info');
+}
+
+// Update dashboard stats on load
+document.addEventListener('DOMContentLoaded', function() {
+    // Simulate loading stats (in a real app, this would fetch from API)
+    setTimeout(() => {
+        document.getElementById('totalEmails-stat').textContent = '42';
+        document.getElementById('unreadEmails-stat').textContent = '7';
+        document.getElementById('sentToday-stat').textContent = '3';
+    }, 1000);
+});
+</script>
+{% endblock %}
+{% endblock %}

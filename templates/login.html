@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}Login - RealLife AI Email System{% endblock %}
+
+{% block content %}
+<div class="sidebar">
+    <div class="sidebar-section">
+        <h3 class="sidebar-title">Account</h3>
+        <a href="/" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="/register" class="nav-item">
+            <i class="fas fa-user-plus"></i>
+            <span>Register</span>
+        </a>
+        <a href="/login" class="nav-item active">
+            <i class="fas fa-sign-in-alt"></i>
+            <span>Login</span>
+        </a>
+    </div>
+</div>
+
+<div class="content-area">
+    <div class="content-header">
+        <h1 class="page-title">Welcome Back</h1>
+        <p class="page-subtitle">Sign in to your RealLife AI Email account</p>
+    </div>
+
+    <div class="content-body">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'error' if category == 'error' else 'success' if category == 'success' else 'warning' }}">
+                        <i class="fas fa-{{ 'exclamation-circle' if category == 'error' else 'check-circle' if category == 'success' else 'exclamation-triangle' }}"></i>
+                        <span>{{ message }}</span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Sign In</h2>
+                <p class="card-subtitle">Enter your credentials to access your account</p>
+            </div>
+
+            <form method="POST" class="form-container">
+                <div class="form-group">
+                    <label for="email" class="form-label">
+                        <i class="fas fa-envelope" style="margin-right: 8px;"></i>
+                        Email Address
+                    </label>
+                    <input type="email" id="email" name="email" class="form-input" required
+                           placeholder="your@email.com" value="{{ request.form.email if request.form.email }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">
+                        <i class="fas fa-lock" style="margin-right: 8px;"></i>
+                        Password
+                    </label>
+                    <input type="password" id="password" name="password" class="form-input" required
+                           placeholder="Enter your password">
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; justify-content: space-between;">
+                        <span style="display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" name="remember" style="margin: 0;">
+                            <span style="font-size: 14px; color: var(--text-gray);">Remember me</span>
+                        </span>
+                        <a href="#" style="color: var(--chrome-blue); font-size: 14px;">Forgot password?</a>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Sign In
+                </button>
+            </form>
+
+            <div style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+                <p style="color: var(--text-gray); margin-bottom: 10px;">
+                    Don't have an account?
+                </p>
+                <a href="/register" class="btn btn-secondary">
+                    <i class="fas fa-user-plus"></i>
+                    Create Account
+                </a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Test Account</h2>
+                <p class="card-subtitle">Use these credentials for testing</p>
+            </div>
+
+            <div style="background: var(--bg-light); padding: 20px; border-radius: 8px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                    <div>
+                        <label style="font-size: 12px; color: var(--text-gray); margin-bottom: 5px; display: block;">Email:</label>
+                        <code style="background: var(--bg-dark); padding: 5px 10px; border-radius: 4px; color: var(--chrome-blue);">test@example.com</code>
+                    </div>
+                    <div>
+                        <label style="font-size: 12px; color: var(--text-gray); margin-bottom: 5px; display: block;">Password:</label>
+                        <code style="background: var(--bg-dark); padding: 5px 10px; border-radius: 4px; color: var(--chrome-blue);">password</code>
+                    </div>
+                </div>
+                <button onclick="copyTestCredentials()" class="btn btn-secondary" style="width: 100%;">
+                    <i class="fas fa-copy"></i>
+                    Copy Credentials
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+function copyTestCredentials() {
+    const email = 'test@example.com';
+    const password = 'password';
+    navigator.clipboard.writeText(`Email: ${email}\nPassword: ${password}`).then(function() {
+        EmailSystem.showAlert('Test credentials copied to clipboard!', 'success');
+    });
+}
+</script>
+{% endblock %}
+{% endblock %}
