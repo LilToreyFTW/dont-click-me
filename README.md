@@ -8,8 +8,17 @@ A comprehensive GUI application with integrated email server for Discord account
 - **1920x1080 resolution** with chrome-style design
 - **Deep chrome blues, blacks, and whites** color scheme
 - **Professional 3D styling** with modern UI elements
-- **Integrated Brave Browser** launcher
+- **Embedded Discord Browser** - Browse Discord directly in the GUI
+- **External Brave Browser** launcher for full web access
 - **Real-time status indicators** and system monitoring
+
+### 🌐 Embedded Discord Browser
+- **Discord-optimized interface** within the GUI
+- **Navigation controls** (back, forward, refresh, home)
+- **Interactive elements** - clickable links and buttons
+- **Login simulation** and account creation flows
+- **No external windows** - everything stays within the GUI
+- **History management** and URL navigation
 
 ### 📧 Email Server System
 - **User registration and authentication**
@@ -183,7 +192,19 @@ python run_system.py
 ```
 
 ### GUI Desktop Application
-The desktop GUI (Tkinter) runs locally and launches Brave browser. It cannot be deployed to Vercel but works as a local application.
+The desktop GUI (Tkinter) runs locally with a fully embedded Discord browser. All Discord operations happen within the GUI interface without opening external windows.
+
+#### Embedded Browser Features
+- **Discord Home Page**: Welcome screen with login/register options
+- **Login Interface**: Simulated Discord login with form fields
+- **Registration Flow**: Account creation with validation
+- **App Interface**: Mock Discord app with servers and channels
+- **Interactive Elements**: Clickable buttons and links
+- **Navigation History**: Back/forward through browsing history
+
+#### External Browser Option
+- **Brave Browser Integration**: Launch external browser for full web access
+- **Dual Browsing Modes**: Choose between embedded or external browsing
 
 ## Development
 
