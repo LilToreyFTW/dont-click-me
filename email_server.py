@@ -19,8 +19,16 @@ import threading
 import time
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = secrets.token_hex(32)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///email_server.db'
+
+# Vercel-compatible configuration
+if os.environ.get('VERCEL'):
+    # Use Vercel's temporary directory for database
+    db_path = '/tmp/email_server.db'
+else:
+    db_path = 'email_server.db'
+
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', secrets.token_hex(32))
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Email configuration (for local testing - in production, use proper SMTP)
@@ -332,11 +340,15 @@ def format_datetime(value):
         value = datetime.fromisoformat(value.replace('Z', '+00:00'))
     return value.strftime('%Y-%m-%d %H:%M')
 
-if __name__ == '__main__':
-    with app.app_context():
+# Initialize database and create sample data when the module is imported
+with app.app_context():
+    try:
         db.create_all()
         create_sample_emails()
+    except Exception as e:
+        print(f"Database initialization error: {e}")
 
+if __name__ == '__main__':
     print("Email Server starting on http://localhost:5000")
     print("Test account: test@example.com / password")
     app.run(debug=True, host='0.0.0.0', port=5000)
