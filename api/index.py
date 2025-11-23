@@ -2,21 +2,29 @@
 Vercel-compatible Flask application entry point for RealLife AI Email System
 """
 
-from flask import Flask
 import os
 import sys
 
-# Add the current directory to Python path for imports
-sys.path.insert(0, os.path.dirname(__file__))
+# Add the parent directory to Python path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 # Import the email server application
 from email_server import app
 
-# Vercel expects the Flask app to be named 'app'
-# But we already have it imported as 'app' from email_server
+# Vercel serverless function handler
+def handler(request, context):
+    """
+    Vercel serverless function handler for Flask app
+    """
+    from werkzeug.middleware.dispatcher import DispatcherMiddleware
+    from werkzeug.serving import WSGIRequestHandler
 
-# For Vercel, we need to export the app
+    # Return the Flask WSGI app
+    return app
+
+# Export the app for Vercel (this is what Vercel looks for)
 app = app
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # For local testing
+    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))

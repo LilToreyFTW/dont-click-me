@@ -950,7 +950,32 @@ class ModernChromeGUI:
 
     def run(self):
         """Start the GUI application"""
-        self.root.mainloop()
+        try:
+            self.root.mainloop()
+        except KeyboardInterrupt:
+            self.cleanup()
+        except Exception as e:
+            print(f"GUI Error: {e}")
+            self.cleanup()
+
+    def cleanup(self):
+        """Clean up resources before exit"""
+        try:
+            # Close any running processes
+            if hasattr(self, 'brave_process') and self.brave_process:
+                try:
+                    self.brave_process.terminate()
+                    self.brave_process.wait(timeout=5)
+                except:
+                    self.brave_process.kill()
+
+            # Destroy main window
+            if hasattr(self, 'root') and self.root:
+                self.root.destroy()
+
+            print("GUI cleanup completed")
+        except Exception as e:
+            print(f"Cleanup error: {e}")
 
 if __name__ == "__main__":
     app = ModernChromeGUI()

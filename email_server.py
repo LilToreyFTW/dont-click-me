@@ -341,12 +341,14 @@ def format_datetime(value):
     return value.strftime('%Y-%m-%d %H:%M')
 
 # Initialize database and create sample data when the module is imported
-with app.app_context():
-    try:
+try:
+    with app.app_context():
         db.create_all()
         create_sample_emails()
-    except Exception as e:
-        print(f"Database initialization error: {e}")
+        print("Database initialized successfully")
+except Exception as e:
+    print(f"Database initialization error: {e}")
+    # Continue anyway - the app should still work
 
 if __name__ == '__main__':
     print("Email Server starting on http://localhost:5000")
