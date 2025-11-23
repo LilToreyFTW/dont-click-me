@@ -253,8 +253,9 @@ This launches:
 ### **Web Deployment (Vercel)**
 The email server is ready for Vercel deployment:
 1. **Connect GitHub repo** to Vercel
-2. **Deploy automatically** with the provided `vercel.json`
-3. **Access web interface** at your Vercel URL
+2. **Set project name** to: `cores-email-ai-approval`
+3. **Deploy automatically** with the provided `vercel.json`
+4. **Access web interface** at: `https://cores-email-ai-approval.vercel.app`
 
 ## 🎯 **System Status**
 
