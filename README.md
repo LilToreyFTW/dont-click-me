@@ -166,6 +166,25 @@ Modify the path in `gui_main.py` if installed elsewhere.
 - Email server logs to console
 - Enable debug mode in Flask for detailed logs
 
+## Deployment
+
+### Vercel Deployment
+1. Go to [Vercel.com](https://vercel.com) and sign in
+2. Click "New Project"
+3. Import your Git repository: `https://github.com/LilToreyFTW/dont-click-me.git`
+4. Vercel will automatically detect the `vercel.json` configuration
+5. Click "Deploy"
+6. Your email system will be live at the provided Vercel URL
+
+### Local Development
+Run the system locally:
+```bash
+python run_system.py
+```
+
+### GUI Desktop Application
+The desktop GUI (Tkinter) runs locally and launches Brave browser. It cannot be deployed to Vercel but works as a local application.
+
 ## Development
 
 ### Adding New Features
