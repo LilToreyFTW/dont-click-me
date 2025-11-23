@@ -24,8 +24,10 @@ app = Flask(__name__)
 if os.environ.get('VERCEL'):
     # Use Vercel's temporary directory for database
     db_path = '/tmp/email_server.db'
+    print(f"Running on Vercel, using database path: {db_path}")
 else:
-    db_path = 'email_server.db'
+    db_path = os.path.join(os.path.dirname(__file__), 'email_server.db')
+    print(f"Running locally, using database path: {db_path}")
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', secrets.token_hex(32))
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
@@ -81,6 +83,17 @@ def index():
     if 'user_id' in session:
         return redirect(url_for('dashboard'))
     return render_template('index.html')
+
+@app.route('/health')
+def health_check():
+    """Health check endpoint for debugging"""
+    return {
+        'status': 'ok',
+        'vercel_env': os.environ.get('VERCEL', 'false'),
+        'database_path': app.config['SQLALCHEMY_DATABASE_URI'],
+        'python_version': sys.version,
+        'working_directory': os.getcwd()
+    }
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -341,14 +354,20 @@ def format_datetime(value):
     return value.strftime('%Y-%m-%d %H:%M')
 
 # Initialize database and create sample data when the module is imported
+print("Starting database initialization...")
 try:
     with app.app_context():
+        print("Creating database tables...")
         db.create_all()
+        print("Creating sample emails...")
         create_sample_emails()
         print("Database initialized successfully")
 except Exception as e:
     print(f"Database initialization error: {e}")
+    import traceback
+    print(f"Traceback: {traceback.format_exc()}")
     # Continue anyway - the app should still work
+    print("Continuing without database initialization...")
 
 if __name__ == '__main__':
     print("Email Server starting on http://localhost:5000")

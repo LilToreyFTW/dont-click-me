@@ -6,25 +6,37 @@ import os
 import sys
 
 # Add the parent directory to Python path for imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+current_dir = os.path.dirname(__file__)
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
 
-# Import the email server application
-from email_server import app
+try:
+    # Import the email server application
+    from email_server import app
+    print("Successfully imported Flask app")
+except Exception as e:
+    print(f"Import error: {e}")
+    # Create a minimal app for debugging
+    from flask import Flask
+    app = Flask(__name__)
 
-# Vercel serverless function handler
-def handler(request, context):
-    """
-    Vercel serverless function handler for Flask app
-    """
-    from werkzeug.middleware.dispatcher import DispatcherMiddleware
-    from werkzeug.serving import WSGIRequestHandler
+    @app.route('/')
+    def home():
+        return f"Import Error: {e}"
 
-    # Return the Flask WSGI app
-    return app
+    @app.route('/debug')
+    def debug():
+        return {
+            "error": str(e),
+            "python_path": sys.path,
+            "current_dir": current_dir,
+            "parent_dir": parent_dir
+        }
 
-# Export the app for Vercel (this is what Vercel looks for)
-app = app
+# This is what Vercel looks for - the WSGI application
+application = app
 
 if __name__ == "__main__":
     # For local testing
-    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=True, host='0.0.0.0', port=port)
