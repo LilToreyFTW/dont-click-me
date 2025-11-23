@@ -182,8 +182,16 @@ Modify the path in `gui_main.py` if installed elsewhere.
 2. Click "New Project"
 3. Import your Git repository: `https://github.com/LilToreyFTW/dont-click-me.git`
 4. Vercel will automatically detect the `vercel.json` configuration
-5. Click "Deploy"
-6. Your email system will be live at the provided Vercel URL
+5. **Note**: If you previously got an error about conflicting `builds` and `functions` properties, this has been fixed
+6. Click "Deploy"
+7. Your email system will be live at the provided Vercel URL
+
+#### Vercel Configuration Details
+- **Runtime**: Python 3.9
+- **Entry Point**: `api/index.py`
+- **Requirements**: `api/requirements.txt`
+- **Routes**: All requests redirected to Flask app
+- **Database**: SQLite with Vercel-compatible temporary storage
 
 ### Local Development
 Run the system locally:
