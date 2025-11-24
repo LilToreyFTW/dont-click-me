@@ -250,12 +250,40 @@ This launches:
 - **Email Server** on `http://localhost:5000`
 - **Full desktop experience** with all buttons functional
 
-### **Web Deployment (Vercel)**
+### **Web Deployment Options**
+
+#### **Option 1: Vercel (Full Flask App)**
 The email server is ready for Vercel deployment:
 1. **Connect GitHub repo** to Vercel
 2. **Set project name** to: `cores-email-ai-approval`
 3. **Deploy automatically** with the provided `vercel.json`
 4. **Access web interface** at: `https://cores-email-ai-approval.vercel.app`
+
+#### **Option 2: Cloudflare Pages (Free Static Hosting)**
+Deploy just the frontend for free:
+```bash
+# Install Wrangler CLI
+npm install -g wrangler
+
+# Login to Cloudflare
+wrangler auth login
+
+# Deploy static site
+wrangler pages deploy ./static --project-name cores-email-ai-approval
+
+# Your site will be at: https://cores-email-ai-approval.pages.dev
+```
+
+#### **Option 3: Netlify (Free Alternative)**
+1. Connect GitHub to Netlify
+2. Deploy from `/static` folder
+3. Get free HTTPS and custom domain options
+
+#### **Option 4: GitHub Pages (Completely Free)**
+1. Create new repo for static site
+2. Copy `/static` folder contents
+3. Enable GitHub Pages in settings
+4. Access at: `https://username.github.io/repo-name`
 
 ## 🎯 **System Status**
 

@@ -1,0 +1,7 @@
+# Redirect rules for Cloudflare Pages
+/api/*  https://cores-email-ai-approval.pages.dev/api/:splat  200
+/health  https://cores-email-ai-approval.pages.dev/health  200
+/debug   https://cores-email-ai-approval.pages.dev/debug   200
+
+# SPA fallback
+/*      /index.html   200

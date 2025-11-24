@@ -1,0 +1,22 @@
+{
+  "name": "cores-email-ai-approval",
+  "version": "1.0.0",
+  "description": "AI Email Approval System with Discord Integration",
+  "main": "index.js",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "build": "echo 'Static site - no build needed'",
+    "pages:dev": "wrangler pages dev ./static --compatibility-date 2024-01-01",
+    "pages:deploy": "wrangler pages deploy ./static"
+  },
+  "keywords": ["email", "ai", "discord", "automation"],
+  "author": "Cores AI",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
