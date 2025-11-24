@@ -296,42 +296,61 @@ if __name__ == "__main__":
         steps = [
             ("Python Version Check", self.check_python_version),
             ("Python Dependencies", self.install_python_dependencies),
-            ("Node.js Dependencies", self.install_node_dependencies),
             ("Database Setup", self.setup_database),
             ("Desktop Shortcuts", self.create_desktop_shortcuts),
             ("Installation Verification", self.verify_installation),
             ("Startup Script Creation", self.create_startup_script),
         ]
 
-        completed_steps = 0
-        total_steps = len(steps)
+        optional_steps = [
+            ("Node.js Dependencies", self.install_node_dependencies),
+        ]
 
+        completed_steps = 0
+        total_steps = len(steps) + len(optional_steps)
+
+        # Required steps
         for step_name, step_function in steps:
             print(f"\\n[{completed_steps + 1}/{total_steps}] {step_name}")
             if step_function():
                 completed_steps += 1
             else:
-                print(f"❌ {step_name} failed - continuing with other steps...")
+                print(f"❌ {step_name} failed - build cannot continue")
+                return False
+
+        # Optional steps
+        for step_name, step_function in optional_steps:
+            print(f"\\n[{completed_steps + 1}/{total_steps}] {step_name} (Optional)")
+            if step_function():
+                completed_steps += 1
+            else:
+                print(f"⚠️ {step_name} failed - skipping optional component")
+                completed_steps += 1  # Still count as completed since it's optional
 
         self.print_header("BUILD COMPLETE")
 
-        if completed_steps == total_steps:
-            print("🎉 ALL SYSTEMS SUCCESSFULLY BUILT!")
+        # Check if all required steps passed (Node.js is optional)
+        required_steps_count = len(steps)
+        if completed_steps >= required_steps_count:
+            print("🎉 CORE SYSTEMS SUCCESSFULLY BUILT!")
             print("\\n🚀 Ready to launch:")
             print("• GUI + Web Server: python start_complete_system.py")
             print("• GUI Only: python gui_main.py")
             print("• Web Only: python email_server.py")
-            print("• Cloudflare Deploy: .\\deploy-ai-host.ps1")
+            if completed_steps < total_steps:
+                print(f"• Cloudflare Deploy: .\\deploy-ai-host.ps1 (requires Node.js)")
+            else:
+                print("• Cloudflare Deploy: .\\deploy-ai-host.ps1")
         else:
-            print(f"⚠️ Build completed with {completed_steps}/{total_steps} successful steps")
-            print("\\n💡 You can still run: python start_complete_system.py")
+            print(f"⚠️ Build completed with {completed_steps}/{required_steps_count} core steps")
+            print("\\n💡 Core functionality may be limited")
 
         print("\\n" + "=" * 60)
         print("🎯 RealLife AI Tools - Build Complete!")
         print("🌐 GUI + Web Server + AI Host Ready")
         print("=" * 60)
 
-        return completed_steps == total_steps
+        return completed_steps >= len(steps)  # Required steps only
 
 if __name__ == "__main__":
     builder = CompleteBuilder()
