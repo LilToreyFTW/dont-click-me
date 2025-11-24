@@ -1,18 +1,42 @@
 name = "cores-email-ai-approval"
-main = "api/index.py"
+main = "workers/ai-host.js"
 compatibility_date = "2024-01-01"
 
-[build]
-command = "echo 'Building Python app'"
+# AI and Analytics bindings
+[[ai.bindings]]
+binding = "AI"
+gateway_id = "your-ai-gateway-id"  # Replace with your actual AI Gateway ID
 
-[[build.upload]]
-format = "modules"
-dir = "api"
-
-[build.upload.rules]
-"api/index.py" = "/"
-"api/requirements.txt" = "/"
+# Analytics and monitoring
+[observability]
+enabled = true
 
 # Environment variables
 [vars]
-FLASK_ENV = "production"
+ENVIRONMENT = "production"
+AI_HOST_VERSION = "mega-enhanced-2.0"
+SECURITY_LEVEL = "enterprise"
+PERFORMANCE_MODE = "optimized"
+
+# Rate limiting
+[rate_limiting]
+requests_per_second = 100
+
+# Custom domains (uncomment and configure)
+# [[routes]]
+# pattern = "your-domain.com"
+# zone_name = "your-zone"
+
+# Edge computing locations
+[placement]
+mode = "smart"
+
+# Build configuration for any static assets
+[build]
+command = "echo 'AI Host Worker - No build required'"
+
+# D1 Database binding (optional, for persistent analytics)
+# [[d1_databases.bindings]]
+# binding = "ANALYTICS_DB"
+# database_name = "ai-host-analytics"
+# database_id = "your-database-id"

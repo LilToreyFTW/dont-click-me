@@ -1,22 +1,34 @@
 {
   "name": "cores-email-ai-approval",
-  "version": "1.0.0",
-  "description": "AI Email Approval System with Discord Integration",
-  "main": "index.js",
+  "version": "2.0.0",
+  "description": "Mega Enhanced AI Host - Advanced AI-powered hosting with machine learning optimization",
+  "main": "workers/ai-host.js",
   "scripts": {
-    "dev": "wrangler dev",
+    "dev": "wrangler dev --port 8787",
     "deploy": "wrangler deploy",
-    "build": "echo 'Static site - no build needed'",
+    "build": "echo 'AI Host Worker - No build required'",
+    "test": "wrangler dev --test-scheduled",
+    "analytics": "wrangler tail --format=pretty",
+    "ai-insights": "curl https://cores-email-ai-approval.your-subdomain.workers.dev/ai-insights",
+    "health": "curl https://cores-email-ai-approval.your-subdomain.workers.dev/health",
     "pages:dev": "wrangler pages dev ./static --compatibility-date 2024-01-01",
-    "pages:deploy": "wrangler pages deploy ./static"
+    "pages:deploy": "wrangler pages deploy ./static",
+    "setup-ai": "wrangler ai create-gateway",
+    "setup-d1": "wrangler d1 create ai-host-analytics"
   },
-  "keywords": ["email", "ai", "discord", "automation"],
-  "author": "Cores AI",
+  "keywords": ["ai", "machine-learning", "edge-computing", "cloudflare", "hosting", "optimization"],
+  "author": "Cores AI - Mega Enhanced",
   "license": "MIT",
   "devDependencies": {
     "wrangler": "^3.0.0"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
+  },
+  "cloudflare": {
+    "ai": true,
+    "d1": true,
+    "analytics": true,
+    "edge": true
   }
 }
