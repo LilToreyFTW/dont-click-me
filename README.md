@@ -240,15 +240,41 @@ This system is a demonstration of GUI and web development concepts. It is not in
 
 ## 🚀 **Ready to Use**
 
-### **Local Desktop Application**
-Run the complete system locally:
+### **Quick Start (Recommended)**
+Build and run everything automatically:
+```bash
+# Windows
+build_and_run.bat
+
+# Linux/Mac
+python build_all.py && python unified_launcher.py
+```
+
+### **Manual Launch Options**
+
+#### **Complete System (GUI + Web Server)**
+```bash
+python unified_launcher.py
+```
+Launches both GUI and web server simultaneously with proper coordination.
+
+#### **Desktop Application Only**
 ```bash
 python run_system.py
 ```
-This launches:
-- **Embedded Discord Browser** in the GUI (1920x1080 chrome-style interface)
-- **Email Server** on `http://localhost:5000`
-- **Full desktop experience** with all buttons functional
+GUI with embedded browser + background web server.
+
+#### **Web Server Only**
+```bash
+python email_server.py
+```
+Flask web server at `http://localhost:5000`.
+
+### **System Verification**
+Check if everything is working:
+```bash
+python check_system.py
+```
 
 ### **Web Deployment Options**
 
